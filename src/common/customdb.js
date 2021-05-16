@@ -34,6 +34,7 @@ class Table {
     async removeItem(itemId) {
         const items = await this.getItems();
         const index = items.findIndex((item) => item.id === itemId);
+        if (index === -1) return null;
         const coontRemove = 1;
 
         return items.splice(index, coontRemove);
