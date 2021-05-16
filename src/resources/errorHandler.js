@@ -5,4 +5,6 @@ const errorHandler = (res, err) => {
     });
 };
 
-module.exports = errorHandler;
+module.exports ={
+    errorHandler
+}
