@@ -10,6 +10,15 @@ class Table {
         return this.data;
     }
 
+    async filterByParam(param, equals) {
+        return this.data.filter((item) => item[param] === equals);
+    }
+
+    async clearByParam(param, equals) {
+        this.data = this.data.filter((item) => item[param] === equals);
+        return this.data;
+    }
+
     async getItem(itemId) {
         const items = await this.getItems();
         const item = items.find((elem) => elem.id === itemId);
@@ -46,9 +55,9 @@ const createTable = (name) => {
     return Tables[indexTable];
 }
 
-const getTable = () => Tables
+const getTables = () => Tables
 
 module.exports = { 
     createTable,
-    getTable
+    getTables
 };
