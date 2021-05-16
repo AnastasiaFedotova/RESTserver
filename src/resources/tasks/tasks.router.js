@@ -2,9 +2,23 @@ const router = require('express').Router();
 const tasksService = require('./tasks.service');
 const { errorHandler } = require("../errorHandler");
 
-router.route('/').get(async (req, res) => {
+router.route('/:boardId/tasks').post(async (req, res) => {
   try {
-    const tasks = await tasksService.getAll();
+    const {boardId} = req.params;
+    const newtask = req.body;
+    const task = await tasksService.addTask(boardId, newtask);
+    res.contentType('application/json');
+    res.status(201).json(task);
+  } catch (err) {
+    errorHandler(res, err);
+  };
+});
+
+
+router.route('/:boardId/tasks').get(async (req, res) => {
+  try {
+    const {boardId} = req.params;
+    const tasks = await tasksService.getAll(boardId);
     res.contentType('application/json');
     res.statusCode = 200;
     res.json(tasks);
@@ -13,9 +27,9 @@ router.route('/').get(async (req, res) => {
   }
 });
 
-router.route('/:id').get(async (req, res) => {
+router.route('/:boardId/tasks/:idTasks').get(async (req, res) => {
   try {
-    const taskId = req.params.id;
+    const taskId = req.params.idTasks;
     const task = await tasksService.getTask(taskId);
     if (task) {
       res.contentType('application/json');
@@ -29,22 +43,11 @@ router.route('/:id').get(async (req, res) => {
   }
 });
 
-router.route('/').post(async (req, res) => {
-  try {
-    const newtask = req.body;
-    const task = await tasksService.addTask(newtask);
-    res.contentType('application/json');
-    res.status(201).json(task);
-  } catch (err) {
-    errorHandler(res, err);
-  };
-});
-
-router.route('/:id').put(async (req, res) => {
+router.route('/:boardId/tasks/:taskId').put(async (req, res) => {
   try {
     const newData = req.body;
-    const userId = req.params.id;
-    const task = await tasksService.updateTask(userId, newData);
+    const {taskId} = req.params;
+    const task = await tasksService.updateTask(taskId, newData);
     res.contentType('application/json');
     res.status(200).json(task);
   } catch (err) {
@@ -52,9 +55,9 @@ router.route('/:id').put(async (req, res) => {
   };
 });
 
-router.route('/:id').delete(async (req, res) => {
+router.route('/:boardId/tasks/:taskId').delete(async (req, res) => {
     try {
-      const taskId = req.params.id;
+      const {taskId} = req.params;
       await tasksService.removeTask(taskId);
       res.contentType('application/json');
       res.statusCode = 204;

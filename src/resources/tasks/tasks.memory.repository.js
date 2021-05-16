@@ -1,8 +1,8 @@
-const createTable = require("./tasks.service");
+const { createTable } = require("../../common/customdb");
 
 const tasksTable = createTable("tasks");
 
-const getAllTasks = () => tasksTable.getItems();
+const getAllTasks = (param, equalsParam) => tasksTable.filterByParam(param, equalsParam);
 
 const getTask = async (tasksId) => {
   const task = await tasksTable.getItem(tasksId);
