@@ -1,16 +1,18 @@
 const boardsRepo = require('./board.memory.repository');
 const Board = require("./board.model");
 
-const getAll = () => boardsRepo.getAllBoards();
-
-const getBoard = (id) => {
-    const board = boardsRepo.getboard(id);
+const getAll = async () => {
+    const boards = boardsRepo.getAllBoards();
+    return boards;
+}
+const getBoard = async (id) => {
+    const board = boardsRepo.getBoard(id);
     return board;
 }
 
 const addBoard = async (body) => {
     const newBoard = new Board(body);
-    const addedboard = boardsRepo.addboard(newBoard);
+    const addedboard = boardsRepo.addBoard(newBoard);
     return addedboard;
 };
 
@@ -21,16 +23,15 @@ const updateBoard = async (boardsId, newBody) => {
         ...newBody
     }
 
-    const updatedBoard = await boardsRepo.updateboard(boardsId, newboard);
+    const updatedBoard = await boardsRepo.updateBoard(boardsId, newboard);
     return updatedBoard;
 };
 
 const removeBoard = async (boardsId) => {
-    const board = await boardsRepo.removeboard(boardsId);
-    return board;
+    boardsRepo.removeBoard(boardsId);
 };
 
-module.exports = { 
+module.exports = {
     getAll,
     getBoard,
     addBoard,
