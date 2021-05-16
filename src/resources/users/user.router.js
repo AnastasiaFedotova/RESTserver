@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const usersService = require('./user.service');
 const User = require('./user.model');
-const errorHandler = require("../errorHandler");
+const { errorHandler } = require("../errorHandler");
 
 router.route('/').get(async (req, res) => {
   try {
