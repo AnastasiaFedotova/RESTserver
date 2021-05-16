@@ -1,4 +1,5 @@
 const { createTable } = require("../../common/customdb");
+const { getTables } = require("../../common/customdb");
 
 const usersTable = createTable("users");
 
@@ -19,8 +20,18 @@ const updateUser = (usersId, newUsers) => {
   return user;
 };
 
-const removeUser = (usersId) => {
+const removeUser = async (usersId) => {
   const user = usersTable.removeItem(usersId);
+
+  const TableTasks = await getTables().find((items) => items.name === 'tasks');
+  const usersTasksawait = await TableTasks.getItems();
+  usersTasksawait.forEach((item) => {
+    if (item.userId === usersId) {
+      const task = item;
+      task.userId = null;
+    }
+  });
+
   return user;
 };
 

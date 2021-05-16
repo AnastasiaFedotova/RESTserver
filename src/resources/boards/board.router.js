@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const boardsService = require('./board.service');
 const { errorHandler } = require("../errorHandler");
-// const Board = require('./board.model');
+const tasksRouter = require("../tasks/tasks.router");
 
 router.route('/').get(async (req, res) => {
   try {
@@ -64,5 +64,7 @@ router.route('/:id').delete(async (req, res) => {
       errorHandler(res, err);
     };
 });
+
+router.use('/', tasksRouter)
 
 module.exports = router;

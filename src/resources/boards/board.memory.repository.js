@@ -1,4 +1,6 @@
 const { createTable } = require("../../common/customdb");
+const { getTables } = require("../../common/customdb");
+
 const Board = require("./board.model");
 
 const boardsTable = createTable("boards");
@@ -28,6 +30,9 @@ const updateBoard = (boardsId, newBoards) => {
 
 const removeBoard = (boardsId) => {
   const board = boardsTable.removeItem(boardsId);
+  const TableTasks = getTables().find((items) => items.name === 'tasks');
+
+  TableTasks.clearByParam('boardsId', boardsId)
   return board;
 };
 
