@@ -1,4 +1,4 @@
-const createTable = require("../../common/customdb");
+const { createTable } = require("../../common/customdb");
 const Board = require("./board.model");
 
 const boardsTable = createTable("boards");

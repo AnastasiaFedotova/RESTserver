@@ -46,4 +46,9 @@ const createTable = (name) => {
     return Tables[indexTable];
 }
 
-module.exports = createTable;
+const getTable = () => Tables
+
+module.exports = { 
+    createTable,
+    getTable
+};

@@ -1,4 +1,4 @@
-const createTable = require("../../common/customdb");
+const { createTable } = require("../../common/customdb");
 
 const usersTable = createTable("users");
 

@@ -1,12 +1,12 @@
-const { v1: uuid } = require('uuid');
+const uuid = require('uuid');
 
 class Board {
   constructor({
-    id = uuid(),
+    id = uuid.v4(),
     title = 'string',
     columns = [
       {
-        id: uuid(),
+        id: uuid.v4(),
         title: 'string',
         order: 0,
       },
