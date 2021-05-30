@@ -1,5 +1,14 @@
 const uuid = require('uuid');
 
+/**
+ * A user object with id, name, login, password.
+ * @typedef {Class} User
+ * @property {string} id a user's id.
+ * @property {string} name a user's name.
+ * @property {string} login a user's login.
+ * @property {string} password a user's password.
+ * @property {Function} toResponse a user's resonse.
+ */
 class User {
   constructor({
     id = uuid.v4(),
