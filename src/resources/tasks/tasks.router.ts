@@ -11,7 +11,7 @@ router.route('/:boardId/tasks').post(async (req, res) => {
     res.status(201).json(task);
   } catch (err) {
     errorHandler(res, err);
-  };
+  }
 });
 
 
@@ -52,7 +52,7 @@ router.route('/:boardId/tasks/:taskId').put(async (req, res) => {
     res.status(200).json(task);
   } catch (err) {
     errorHandler(res, err);
-  };
+  }
 });
 
 router.route('/:boardId/tasks/:taskId').delete(async (req, res) => {
@@ -64,7 +64,7 @@ router.route('/:boardId/tasks/:taskId').delete(async (req, res) => {
       res.json('The task has been deleted');
     } catch (err) {
       errorHandler(res, err);
-    };
+    }
 });
 
 module.exports = router;
