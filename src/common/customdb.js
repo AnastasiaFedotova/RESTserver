@@ -72,6 +72,7 @@ const createTable = (name) => {
 const getTables = () => Tables
 
 module.exports = {
+    Table,
     createTable,
     getTables
 };

@@ -1,4 +1,4 @@
-const uuid = require('uuid');
+const Uuid = require('uuid');
 
 /**
  * A colum with id, title, order.
@@ -16,8 +16,11 @@ const uuid = require('uuid');
  * @property {Array<Colum>} columns a task's columns.
  */
 class Board {
+  id: string;
+  title: string;
+  columns: { id: string; title: string; order: number; }[];
   constructor({
-    id = uuid.v4(),
+    id = Uuid.v4(),
     title = 'string',
     columns = [
       {

@@ -1,5 +1,5 @@
 const { createTable } = require("../../common/customdb");
-
+const Task1 = require("./tasks.model");
 const tasksTable = createTable("tasks");
 
 /**
@@ -20,14 +20,14 @@ const tasksTable = createTable("tasks");
  * @param {equalsParam} equalsParam param value to search
  * @returns {Array<Task>} task array by param
  */
-const getAllTasks = (param, equalsParam) => tasksTable.filterByParam(param, equalsParam);
+const getAllTasks = (param: string, equalsParam: string): typeof Task1 => tasksTable.filterByParam(param, equalsParam);
 
 /**
  * Returns task by id
  * @param {string} tasksId
  * @returns {Task} task by id
  */
-const getTask = async (tasksId) => {
+const getTasks = async (tasksId: string): Promise<typeof Task1> => {
   const task = await tasksTable.getItem(tasksId);
   if (!task) {
     return null;
@@ -40,7 +40,7 @@ const getTask = async (tasksId) => {
  * @param {Task} task object with id, title. order, description, userId, boardId, columId
  * @returns {Task} added a task
  */
-const addTask = (task) => {
+const addTasks = (task: typeof Task): typeof Task1 => {
   const newtask = tasksTable.addItem(task);
   return newtask;
 };
@@ -51,7 +51,7 @@ const addTask = (task) => {
  * @param {Task} task a new tasks data
  * @returns {Task} updated a task
  */
-const updateTask = (tasksId, newtasks) => {
+const updateTasks = (tasksId: string, newtasks: typeof Task1): typeof Task1 => {
   const task = tasksTable.updateItem(tasksId, newtasks);
   return task;
 };
@@ -61,16 +61,16 @@ const updateTask = (tasksId, newtasks) => {
  * @param {string} tasksId tasks id
  * @returns {Task} removed a task
  */
-const removeTask = (tasksId) => {
+const removeTasks = (tasksId: string): typeof Task1 => {
   const task = tasksTable.removeItem(tasksId);
   return task;
 };
 
 module.exports = {
   getAllTasks,
-  getTask,
-  addTask,
-  updateTask,
-  removeTask
+  getTasks,
+  addTasks,
+  updateTasks,
+  removeTasks
 };
 

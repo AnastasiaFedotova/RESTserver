@@ -1,9 +1,8 @@
-const { createTable } = require("../../common/customdb");
-const { getTables } = require("../../common/customdb");
+const board = require("../../common/customdb");
+const { Table } = require("./../../common/custom.js")
+const BoardModel = require("./board.model");
 
-const Board = require("./board.model");
-
-const boardsTable = createTable("boards");
+const boardsTable = board.createTable("boards");
 
 /**
  * A colum with id, title, order.
@@ -32,7 +31,7 @@ const getAllBoards = () => boardsTable.getItems();
  * @param {string} boardsId boards id
  * @returns {Board} a board by id
  */
-const getBoard = async (boardsId) => {
+const getBoard = async (boardsId: string) => {
   const board = await boardsTable.getItem(boardsId);
   if (!board) {
     return null;
@@ -45,7 +44,7 @@ const getBoard = async (boardsId) => {
  * @param {Board} board object with id, title. colums
  * @returns {Board} added a board
  */
-const addBoard = (board) => {
+const addBoard = (board: typeof BoardModel) => {
   const newboard = boardsTable.addItem(board);
   return newboard;
 };
@@ -59,7 +58,7 @@ boardsTable.addItem(new Board());
  * @param {Board} newBoards a new boards data
  * @returns {Board} updated a board
  */
-const updateBoard = (boardsId, newBoards) => {
+const updateBoard = (boardsId: string, newBoards: typeof BoardModel) => {
   const board = boardsTable.updateItem(boardsId, newBoards);
   return board;
 };
@@ -69,9 +68,9 @@ const updateBoard = (boardsId, newBoards) => {
  * @param {string} boardsId a boards id
  * @returns {Board} removed a board
  */
-const removeBoard = (boardsId) => {
+const removeBoard = (boardsId: string) => {
   const board = boardsTable.removeItem(boardsId);
-  const TableTasks = getTables().find((items) => items.name === 'tasks');
+  const TableTasks = board.getTables().find((items: typeof Table) => items.name === 'tasks');
 
   TableTasks.clearByParam('boardsId', boardsId)
   return board;

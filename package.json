@@ -6,7 +6,6 @@
     "url": ""
   },
   "type": "commonjs",
-  "description": "REST service starter for RS School",
   "main": "src/server.js",
   "parserOptions": {
     "project": "./tsconfig.json"

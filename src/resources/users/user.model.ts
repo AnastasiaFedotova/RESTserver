@@ -1,4 +1,4 @@
-const uuid = require('uuid');
+const { v4 } = require('uuid');
 
 /**
  * A user object with id, name, login, password.
@@ -10,8 +10,12 @@ const uuid = require('uuid');
  * @property {Function} toResponse a user's resonse.
  */
 class User {
+  password: string;
+  login: string;
+  id: string;
+  name: string;
   constructor({
-    id = uuid.v4(),
+    id = v4(),
     name = 'USER',
     login = 'user',
     password = 'P@55w0rd'
@@ -22,7 +26,7 @@ class User {
     this.password = password;
   }
 
-  static toResponse(user) {
+  static toResponse(user: { id: string; name: string; login: string; }) {
     const { id, name, login } = user;
     return { id, name, login };
   }

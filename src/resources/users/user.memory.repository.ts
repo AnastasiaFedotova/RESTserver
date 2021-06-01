@@ -1,7 +1,8 @@
-const { createTable } = require("../../common/customdb");
+const table = require("../../common/customdb");
 const { getTables } = require("../../common/customdb");
+const Users = require("./user.model");
+const usersTable = table.createTable("users");
 
-const usersTable = createTable("users");
 /**
  * A user object with id, name, login, password.
  * @typedef {Object} User
@@ -15,14 +16,14 @@ const usersTable = createTable("users");
  * Returns all users
  * @returns {Array<User>} users array
  */
-const getAllUsers = () => usersTable.getItems();
+const getAllUsers = (): Array<typeof Users> => usersTable.getItems();
 
 /**
  * Returns a user by ID
  * @param {string} usersId users ID
  * @returns {User} user
  */
-const getUser = (usersId) => {
+const getUsers = (usersId: string): typeof Users => {
   const user = usersTable.getItem(usersId);
   return user;
 };
@@ -32,7 +33,7 @@ const getUser = (usersId) => {
  * @param {User} user object to be added
  * @returns {User} a new user
  */
-const addUser = (user) => {
+const addUsers = (user: typeof Users): typeof Users => {
   const newUser = usersTable.addItem(user);
   return newUser;
 };
@@ -43,7 +44,7 @@ const addUser = (user) => {
  * @param {User} newUsers a new users data
  * @returns {User} updated a user
  */
-const updateUser = (usersId, newUsers) => {
+const updateUsers = (usersId: string, newUsers: typeof User): typeof Users => {
   const user = usersTable.updateItem(usersId, newUsers);
   return user;
 };
@@ -53,12 +54,12 @@ const updateUser = (usersId, newUsers) => {
  * @param {string} usersId a users id
  * @returns {User} deleted a user
  */
-const removeUser = async (usersId) => {
+const removeUsers = async (usersId: string): Promise<typeof Users> => {
   const user = usersTable.removeItem(usersId);
 
-  const TableTasks = await getTables().find((items) => items.name === 'tasks');
+  const TableTasks = await getTables().find((items: { name: string }) => items.name === 'tasks');
   const usersTasksawait = await TableTasks.getItems();
-  usersTasksawait.forEach((item) => {
+  usersTasksawait.forEach((item: { userId: string | null }) => {
     if (item.userId === usersId) {
       const task = item;
       task.userId = null;
@@ -70,9 +71,9 @@ const removeUser = async (usersId) => {
 
 module.exports = {
   getAllUsers,
-  getUser,
-  addUser,
-  updateUser,
-  removeUser
+  getUsers,
+  addUsers,
+  updateUsers,
+  removeUsers
 };
 
