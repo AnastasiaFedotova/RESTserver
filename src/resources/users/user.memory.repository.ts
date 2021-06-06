@@ -53,7 +53,7 @@ const update = (id: string, newUser: User): Promise<User> => {
  * @returns {User} deleted a user
  */
 const remove = async (id: string): Promise<User | undefined> => {
-  const user = dbContext.getUsersTable().removeItem(id);
+  const user = await dbContext.getUsersTable().removeItem(id);
   const usersTasks = await dbContext.getTasksTable().getItems();
 
   usersTasks.forEach((item: { userId: string | null }) => {

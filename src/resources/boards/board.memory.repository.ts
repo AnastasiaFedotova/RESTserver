@@ -59,7 +59,7 @@ const update = (boardsId: string, newBoards: Board) => {
  * @param {string} boardsId a boards id
  * @returns {Board} removed a board
  */
-const remove = (id: string) => {
+const remove = async (id: string) => {
   const board = dbContext.getBoardsTable().removeItem(id);
   const taskTable = dbContext.getTasksTable();
 

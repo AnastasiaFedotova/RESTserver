@@ -19,7 +19,7 @@ const getById = async (id: string): Promise<Task | null> => {
  */
 const add = async (boardId: string, body: Task): Promise<Task> => {
   body.boardId = boardId;
-  const addedtask = tasksRepo.add(body);
+  const addedtask = await tasksRepo.add(body);
   return addedtask;
 };
 

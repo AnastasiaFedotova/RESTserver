@@ -84,6 +84,18 @@ class Context {
 
     constructor(){
         this.boardsTable = new Table<Board>("boards");
+        this.boardsTable.addItem(new Board('1', 'board1', [{
+          id: '1',
+          title: 'colum1',
+          order: 1
+        }]));
+
+        this.boardsTable.addItem(new Board('2', 'board2', [{
+          id: '2',
+          title: 'colum2',
+          order: 2
+        }]));
+
         this.usersTable = new Table<User>("users");
         this.tasksTable = new Table<Task>("tasks");
     }

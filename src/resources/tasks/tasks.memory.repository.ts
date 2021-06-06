@@ -20,8 +20,7 @@ import dbContext from "../../common/db.memory";
  * @param {equalsParam} equalsParam param value to search
  * @returns {Array<Task>} task array by param
  */
-const find = (predicator: (value: Task) => Boolean): Promise<Task[]> => dbContext.getTasksTable()
-    .find(predicator);
+const find = (predicator: (value: Task) => Boolean): Promise<Task[]> => dbContext.getTasksTable().find(predicator);
 
 /**
  * Returns task by id
