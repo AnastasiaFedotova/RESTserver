@@ -31,7 +31,7 @@ const add = async (boardId: string, body: Task): Promise<Task> => {
  * @returns {Array<Task>} task array board id
  */
 const getAll = async (boardId: string): Promise<Array<Task>> => {
-  let tasks = tasksRepo.find(t => t.boardId === boardId);
+  const tasks = tasksRepo.find(t => t.boardId === boardId);
   return tasks;
 }
 

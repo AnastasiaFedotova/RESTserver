@@ -1,5 +1,5 @@
 import Board from "./board.model";
-import dbContext from "../../common/db.memory";;
+import dbContext from "../../common/db.memory";
 
 /**
  * A colum with id, title, order.

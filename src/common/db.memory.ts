@@ -34,11 +34,11 @@ class Table<T extends Entity> {
         return this.data;
     }
 
-    async find(predicator: (value: T) => Boolean) {
+    async find(predicator: (value: T) => boolean) {
         return this.data.filter(predicator);
     }
 
-    async removeItems(predicator: (value: T) => Boolean) {
+    async removeItems(predicator: (value: T) => boolean) {
         this.data = this.data.filter(t => !predicator(t));
         return this.data;
     }
@@ -70,7 +70,7 @@ class Table<T extends Entity> {
 
         if (index === -1) throw Error("Item not found");
 
-        var result = items[index];
+        const result = items[index];
         items.splice(index, 1);
 
         return result;
