@@ -1,7 +1,5 @@
-const table = require("../../common/customdb");
-const { getTables } = require("../../common/customdb");
-const Users = require("./user.model");
-const usersTable = table.createTable("users");
+import dbContext from "../../common/db.memory";
+import User from "./user.model";
 
 /**
  * A user object with id, name, login, password.
@@ -16,15 +14,15 @@ const usersTable = table.createTable("users");
  * Returns all users
  * @returns {Array<User>} users array
  */
-const getAllUsers = (): Array<typeof Users> => usersTable.getItems();
+const getList = async (): Promise<Array<User>> => dbContext.getUsersTable().getItems();
 
 /**
  * Returns a user by ID
  * @param {string} usersId users ID
  * @returns {User} user
  */
-const getUsers = (usersId: string): typeof Users => {
-  const user = usersTable.getItem(usersId);
+const getById = (id: string): Promise<User | undefined> => {
+  const user = dbContext.getUsersTable().getItem(id);
   return user;
 };
 
@@ -33,8 +31,8 @@ const getUsers = (usersId: string): typeof Users => {
  * @param {User} user object to be added
  * @returns {User} a new user
  */
-const addUsers = (user: typeof Users): typeof Users => {
-  const newUser = usersTable.addItem(user);
+const add = (user: User): Promise<User> => {
+  const newUser = dbContext.getUsersTable().addItem(user);
   return newUser;
 };
 
@@ -44,8 +42,8 @@ const addUsers = (user: typeof Users): typeof Users => {
  * @param {User} newUsers a new users data
  * @returns {User} updated a user
  */
-const updateUsers = (usersId: string, newUsers: typeof User): typeof Users => {
-  const user = usersTable.updateItem(usersId, newUsers);
+const update = (id: string, newUser: User): Promise<User> => {
+  const user = dbContext.getUsersTable().updateItem(id, newUser);
   return user;
 };
 
@@ -54,13 +52,12 @@ const updateUsers = (usersId: string, newUsers: typeof User): typeof Users => {
  * @param {string} usersId a users id
  * @returns {User} deleted a user
  */
-const removeUsers = async (usersId: string): Promise<typeof Users> => {
-  const user = usersTable.removeItem(usersId);
+const remove = async (id: string): Promise<User | undefined> => {
+  const user = dbContext.getUsersTable().removeItem(id);
+  const usersTasks = await dbContext.getTasksTable().getItems();
 
-  const TableTasks = await getTables().find((items: { name: string }) => items.name === 'tasks');
-  const usersTasksawait = await TableTasks.getItems();
-  usersTasksawait.forEach((item: { userId: string | null }) => {
-    if (item.userId === usersId) {
+  usersTasks.forEach((item: { userId: string | null }) => {
+    if (item.userId === id) {
       const task = item;
       task.userId = null;
     }
@@ -69,11 +66,11 @@ const removeUsers = async (usersId: string): Promise<typeof Users> => {
   return user;
 };
 
-module.exports = {
-  getAllUsers,
-  getUsers,
-  addUsers,
-  updateUsers,
-  removeUsers
+export {
+  getList,
+  getById,
+  add,
+  update,
+  remove
 };
 

@@ -13,15 +13,17 @@ const uuid = require('uuid');
  * @property {Function} toResponse a task's response.
  */
 class Task {
-  constructor({
-    id = uuid.v4(),
-    title = 'string',
-    order = 0,
-    description = 'string',
-    userId = null,
-    boardId = null,
-    columnId = null,
-  } = {}) {
+
+  id: string
+  title: string
+  order: number
+  description: string
+  userId: string | null
+  boardId: string | null
+  columnId: string | null
+
+  constructor(id: string, title: string, order: number, description: string, userId: string | null,
+    boardId: string | null, columnId: string | null) {
     this.id = id;
     this.title = title;
     this.order = order;
@@ -31,10 +33,10 @@ class Task {
     this.columnId = columnId;
   }
 
-  static toResponse(task) {
+  static toResponse(task: Task) {
     const { id, title, order, description, userId } = task;
     return { id, title, order, description, userId };
   }
 }
 
-module.exports = Task;
+export default Task;

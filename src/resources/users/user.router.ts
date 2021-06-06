@@ -1,62 +1,48 @@
 /* eslint-disable @typescript-eslint/ban-types */
-const userrouter = require('express').Router();
-const usersService = require('./user.service');
-const UserModel = require('./user.model');
-const errors = require("../errorHandler");
+import express from 'express';
+import * as usersService from './user.service';
+import User from './user.model'
+const router = express.Router();
 
-userrouter.route('/').get(async (_req: string, res: { contentType: (arg0: string) => void; json: (arg0: string) => { (): string; new(): string; status: { (arg0: number): void; new(): string; }; }; }) => {
-  try {
-    const users = await usersService.getAll();
+router.route('/').get(async (_, res) => {
+    const users = await usersService.getList();
     res.contentType('application/json');
-    res.json(users.map(UserModel.toResponse)).status(200);
-  } catch (err) {
-    errors.errorHandler(res, err);
-  }
+    res.json(users.map(toResponse)).status(200);
 });
 
-userrouter.route('/:id').get(async (req: { params: { id: string; }; }, res: { contentType: (arg0: string) => void; json: (arg0: string) => { (): string; new(): string; status: { (arg0: number): void; new(): string; }; }; }) => {
-  try {
+router.route('/:id').get(async (req, res) => {
     const userId = req.params.id;
-    const user = await usersService.getUser(userId);
+    const user = await usersService.getById(userId);
+    if (user == undefined) throw Error();
 
     res.contentType('application/json');
-    res.json(UserModel.toResponse(user)).status(201);
-  } catch (err) {
-    errors.errorHandler(res, err);
-  }
+    res.json(toResponse(user)).status(201);
 });
 
-userrouter.route('/').post(async (req: { body: {}; }, res: { contentType: (arg0: string) => void; status: (arg0: number) => { (): string; new(): string; json: { (arg0: string): void; new(): string; }; }; }) => {
-  try {
+router.route('/').post(async (req, res) => {
     const newUser = req.body;
-    const user = await usersService.addUser(newUser);
+    const user = await usersService.add(newUser);
     res.contentType('application/json');
-    res.status(201).json(UserModel.toResponse(user));
-  } catch (err) {
-    errors.errorHandler(res, err);
-  }
+    res.status(201).json(toResponse(user));
 });
 
-userrouter.route('/:id').put(async (req: { body: string; params: { id: string; }; }, res: { contentType: (arg0: string) => void; status: (arg0: number) => { (): string; new(): string; json: { (arg0: string): void; new(): string; }; }; }) => {
-  try {
+router.route('/:id').put(async (req, res) => {
     const newDate = req.body;
     const userId = req.params.id;
-    const user = await usersService.updateUser(userId, newDate);
+    const user = await usersService.update(userId, newDate);
     res.contentType('application/json');
-    res.status(200).json(UserModel.toResponse(user));
-  } catch (err) {
-    errors.errorHandler(res, err);
-  }
+    res.status(200).json(toResponse(user));
 });
 
-userrouter.route('/:id').delete(async (req: { params: { id: string; }; }, res: { status: (arg0: number) => { (): string; new(): string; json: { (arg0: string): void; new(): string; }; }; }) => {
-  try {
+router.route('/:id').delete(async (req, res) => {
     const userId = req.params.id;
-    await usersService.removeUser(userId);
+    await usersService.remove(userId);
     res.status(204).json('The user has been deleted');
-  } catch (err) {
-    errors.errorHandler(res, err);
-  }
 });
 
-module.exports = userrouter;
+export default router;
+
+function toResponse(user: User) {
+  const { id, name, login } = user;
+  return { id, name, login };
+}

@@ -1,12 +1,12 @@
-const boardsRepo = require('./board.memory.repository');
-const boardModel = require("./board.model");
-
+import * as boardsRepo from './board.memory.repository';
+import * as uuid from "uuid"
+import Board from './board.model';
 /**
  * Returns all boards
  * @returns {Array<Board>} all boards
  */
-const gettedAll = async () => {
-  const boards = boardsRepo.getAllBoards();
+const getAll = async () => {
+  const boards = boardsRepo.getList();
   return boards;
 }
 
@@ -15,8 +15,8 @@ const gettedAll = async () => {
  * @param {string} id boards id
  * @returns {Board} a board by id
  */
-const gettedBoard = async (id: string) => {
-  const board = boardsRepo.getBoard(id);
+const getById = async (id: string) => {
+  const board = boardsRepo.getById(id);
   return board;
 }
 
@@ -25,9 +25,9 @@ const gettedBoard = async (id: string) => {
  * @param {Board} body object with id, title. colums
  * @returns {Board} added a board
  */
-const addedBoard = async (body: typeof boardModel): Promise<typeof boardModel> => {
-  const newBoard = new Board(body);
-  const addedboard = boardsRepo.addBoard(newBoard);
+const add = async (body: Board): Promise<Board> => {
+  body.id = uuid.v4();
+  const addedboard = boardsRepo.add(body);
   return addedboard;
 };
 
@@ -37,14 +37,14 @@ const addedBoard = async (body: typeof boardModel): Promise<typeof boardModel> =
  * @param {Board} newBody a new boards data
  * @returns {Board} updated a board
  */
-const updatedBoard = async (boardsId: string, newBody: typeof boardModel) => {
-  const board = await getBoard(boardsId);
-  const newboard = {
-    ...board,
-    ...newBody
-  }
+const update = async (id: string, newBody: Board) => {
+  const board = await getById(id);
 
-  const updatedBoard = await boardsRepo.updateBoard(boardsId, newboard);
+  if (board == undefined) throw Error()
+
+  newBody.id = board.id;
+
+  const updatedBoard = await boardsRepo.update(id, newBody);
   return updatedBoard;
 };
 
@@ -53,12 +53,12 @@ const updatedBoard = async (boardsId: string, newBody: typeof boardModel) => {
  * @param {string} boardsId a boards id
  * @returns {Board} removed a board
  */
-const removedBoard = async (boardsId: string) => boardsRepo.removeBoard(boardsId);
+const remove = async (id: string) => boardsRepo.remove(id);
 
-module.exports = {
-  gettedAll,
-  gettedBoard,
-  addedBoard,
-  updatedBoard,
-  removedBoard
+export {
+  getAll,
+  getById,
+  add,
+  update,
+  remove
 };

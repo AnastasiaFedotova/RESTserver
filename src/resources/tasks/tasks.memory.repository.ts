@@ -1,6 +1,6 @@
-const { createTable } = require("../../common/customdb");
-const Task1 = require("./tasks.model");
-const tasksTable = createTable("tasks");
+
+import Task from "./tasks.model";
+import dbContext from "../../common/db.memory";
 
 /**
  * A task object with id, title. order, description, userId, boardId, columId.
@@ -15,20 +15,21 @@ const tasksTable = createTable("tasks");
  */
 
 /**
- * Returns all tasks by param
+ * Returns all tasks by filter
  * @param {string} param param key to search
  * @param {equalsParam} equalsParam param value to search
  * @returns {Array<Task>} task array by param
  */
-const getAllTasks = (param: string, equalsParam: string): typeof Task1 => tasksTable.filterByParam(param, equalsParam);
+const find = (predicator: (value: Task) => Boolean): Promise<Task[]> => dbContext.getTasksTable()
+    .find(predicator);
 
 /**
  * Returns task by id
  * @param {string} tasksId
  * @returns {Task} task by id
  */
-const getTasks = async (tasksId: string): Promise<typeof Task1> => {
-  const task = await tasksTable.getItem(tasksId);
+const getById = async (tasksId: string): Promise<Task | null> => {
+  const task = await dbContext.getTasksTable().getItem(tasksId);
   if (!task) {
     return null;
   }
@@ -40,8 +41,8 @@ const getTasks = async (tasksId: string): Promise<typeof Task1> => {
  * @param {Task} task object with id, title. order, description, userId, boardId, columId
  * @returns {Task} added a task
  */
-const addTasks = (task: typeof Task): typeof Task1 => {
-  const newtask = tasksTable.addItem(task);
+const add = (task: Task): Promise<Task> => {
+  const newtask = dbContext.getTasksTable().addItem(task);
   return newtask;
 };
 
@@ -51,8 +52,8 @@ const addTasks = (task: typeof Task): typeof Task1 => {
  * @param {Task} task a new tasks data
  * @returns {Task} updated a task
  */
-const updateTasks = (tasksId: string, newtasks: typeof Task1): typeof Task1 => {
-  const task = tasksTable.updateItem(tasksId, newtasks);
+const update = (tasksId: string, newtasks: Task): Promise<Task> => {
+  const task = dbContext.getTasksTable().updateItem(tasksId, newtasks);
   return task;
 };
 
@@ -61,16 +62,16 @@ const updateTasks = (tasksId: string, newtasks: typeof Task1): typeof Task1 => {
  * @param {string} tasksId tasks id
  * @returns {Task} removed a task
  */
-const removeTasks = (tasksId: string): typeof Task1 => {
-  const task = tasksTable.removeItem(tasksId);
+const remove = (tasksId: string): Promise<Task | undefined> => {
+  const task = dbContext.getTasksTable().removeItem(tasksId);
   return task;
 };
 
-module.exports = {
-  getAllTasks,
-  getTasks,
-  addTasks,
-  updateTasks,
-  removeTasks
+export {
+  find,
+  getById,
+  add,
+  update,
+  remove
 };
 

@@ -1,12 +1,13 @@
-const usersRepo = require('./user.memory.repository');
-const UsersModel = require("./user.model");
+import * as usersRepo from './user.memory.repository';
+import User from "./user.model";
+import * as uuid from 'uuid'
 
 /**
  * Returns all users
  * @returns {Array<User>} users array
  */
-const getAllTasksBY = (): Array<typeof UsersModel> => {
-  return usersRepo.getAllUsers();
+const getList = (): Promise<User[]> => {
+  return usersRepo.getList();
 }
 
 /**
@@ -14,8 +15,8 @@ const getAllTasksBY = (): Array<typeof UsersModel> => {
  * @param {string} id users ID
  * @returns {User} user
  */
-const getUser = (id: string): typeof UsersModel => {
-  const user = usersRepo.getUsers(id);
+const getById = (id: string): Promise<User | undefined> => {
+  const user = usersRepo.getById(id);
   return user;
 }
 
@@ -24,9 +25,9 @@ const getUser = (id: string): typeof UsersModel => {
  * @param {User} body responses body with new users data
  * @returns {User} a new user
  */
-const addUser = async (body: typeof User): Promise<typeof UsersModel> => {
-  const newUser = new UsersModel(body);
-  const addedUser = usersRepo.addUsers(newUser);
+const add = async (body: User): Promise<User> => {
+  body.id = uuid.v4();
+  const addedUser = usersRepo.add(body);
   return addedUser;
 };
 
@@ -36,14 +37,13 @@ const addUser = async (body: typeof User): Promise<typeof UsersModel> => {
  * @param {User} newBody responses body with a users data
  * @returns {User} updated a user
  */
-const updateUser = async (usersId: string, newBody: typeof UsersModel): Promise<typeof UsersModel> => {
-  const user = await getUser(usersId);
-  const newUser = {
-    ...user,
-    ...newBody
-  }
+const update = async (id: string, newBody: User): Promise<User> => {
+  const user = await getById(id);
+  if (user == undefined) throw Error();
 
-  const updatedUser = await usersRepo.updateUsers(usersId, newUser);
+  newBody.id = user.id;
+
+  const updatedUser = await usersRepo.update(user.id, newBody);
   return updatedUser;
 };
 
@@ -52,15 +52,15 @@ const updateUser = async (usersId: string, newBody: typeof UsersModel): Promise<
  * @param {string} usersId a users id
  * @returns {User} deleted a user
  */
-const removeUser = async (usersId: string): Promise<typeof UsersModel> => {
-  const user = await usersRepo.removeUsers(usersId);
+const remove = async (usersId: string): Promise<User | undefined> => {
+  const user = await usersRepo.remove(usersId);
   return user;
 };
 
-module.exports = {
-  getAllTasksBY,
-  getUser,
-  addUser,
-  updateUser,
-  removeUser
+export {
+  getList,
+  getById,
+  add,
+  update,
+  remove
 };

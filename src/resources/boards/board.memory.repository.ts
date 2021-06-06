@@ -1,8 +1,5 @@
-const board = require("../../common/customdb");
-const { Table } = require("./../../common/custom.js")
-const BoardModel = require("./board.model");
-
-const boardsTable = board.createTable("boards");
+import Board from "./board.model";
+import dbContext from "../../common/db.memory";;
 
 /**
  * A colum with id, title, order.
@@ -24,18 +21,15 @@ const boardsTable = board.createTable("boards");
  * Returns all boards
  * @returns {Array<Board>} all boards
  */
-const getAllBoards = () => boardsTable.getItems();
+const getList = () => dbContext.getBoardsTable().getItems();
 
 /**
  * Returns a board by id
  * @param {string} boardsId boards id
  * @returns {Board} a board by id
  */
-const getBoard = async (boardsId: string) => {
-  const board = await boardsTable.getItem(boardsId);
-  if (!board) {
-    return null;
-  }
+const getById = async (id: string) => {
+  const board = dbContext.getBoardsTable().getItem(id);
   return board;
 };
 
@@ -44,13 +38,10 @@ const getBoard = async (boardsId: string) => {
  * @param {Board} board object with id, title. colums
  * @returns {Board} added a board
  */
-const addBoard = (board: typeof BoardModel) => {
-  const newboard = boardsTable.addItem(board);
+const add = (board: Board) => {
+  const newboard = dbContext.getBoardsTable().addItem(board);
   return newboard;
 };
-
-boardsTable.addItem(new Board());
-boardsTable.addItem(new Board());
 
 /**
  * Returns updated board
@@ -58,8 +49,8 @@ boardsTable.addItem(new Board());
  * @param {Board} newBoards a new boards data
  * @returns {Board} updated a board
  */
-const updateBoard = (boardsId: string, newBoards: typeof BoardModel) => {
-  const board = boardsTable.updateItem(boardsId, newBoards);
+const update = (boardsId: string, newBoards: Board) => {
+  const board = dbContext.getBoardsTable().updateItem(boardsId, newBoards);
   return board;
 };
 
@@ -68,19 +59,19 @@ const updateBoard = (boardsId: string, newBoards: typeof BoardModel) => {
  * @param {string} boardsId a boards id
  * @returns {Board} removed a board
  */
-const removeBoard = (boardsId: string) => {
-  const board = boardsTable.removeItem(boardsId);
-  const TableTasks = board.getTables().find((items: typeof Table) => items.name === 'tasks');
+const remove = (id: string) => {
+  const board = dbContext.getBoardsTable().removeItem(id);
+  const taskTable = dbContext.getTasksTable();
 
-  TableTasks.clearByParam('boardsId', boardsId)
+  taskTable.removeItems(t => t.boardId === id);
   return board;
 };
 
-module.exports = {
-  getAllBoards,
-  getBoard,
-  addBoard,
-  updateBoard,
-  removeBoard
+export {
+  getList,
+  getById,
+  add,
+  update,
+  remove
 };
 

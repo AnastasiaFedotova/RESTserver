@@ -1,5 +1,3 @@
-const Uuid = require('uuid');
-
 /**
  * A colum with id, title, order.
  * @typedef {Object} Colum
@@ -19,21 +17,18 @@ class Board {
   id: string;
   title: string;
   columns: { id: string; title: string; order: number; }[];
-  constructor({
-    id = Uuid.v4(),
-    title = 'string',
-    columns = [
-      {
-        id: uuid.v4(),
-        title: 'string',
-        order: 0,
-      },
-    ],
-  } = {}) {
+  constructor(
+    id: string,
+    title: string,
+    columns : {
+      id: string
+      title: string,
+      order: number
+    }[]) {
     this.id = id;
     this.title = title;
     this.columns = columns;
   }
 }
 
-module.exports = Board;
+export default Board;
