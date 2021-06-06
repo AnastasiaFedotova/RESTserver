@@ -10,7 +10,6 @@ import unhandledExceptions from './middlewares/unhandledExceptions'
 const app = express();
 const swaggerDocument = yaml.load(path.join(__dirname, '../doc/api.yaml'));
 
-app.use(unhandledExceptions);
 app.use(rrTracer);
 
 app.use(express.json());
@@ -26,6 +25,6 @@ app.use('/', (req, res, next) => {
 
 app.use('/users', userRouter);
 app.use('/boards', boardRouter);
-
+app.use(unhandledExceptions);
 
 export { app }
