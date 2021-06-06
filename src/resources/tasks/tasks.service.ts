@@ -1,3 +1,4 @@
+import * as uuid from 'uuid';
 import * as tasksRepo from './tasks.memory.repository';
 import Task from "./tasks.model";
 
@@ -19,7 +20,8 @@ const getById = async (id: string): Promise<Task | null> => {
  */
 const add = async (boardId: string, body: Task): Promise<Task> => {
   body.boardId = boardId;
-  const addedtask = await tasksRepo.add(body);
+  body.id = uuid.v4();
+  const addedtask = tasksRepo.add(body);
   return addedtask;
 };
 
@@ -29,7 +31,7 @@ const add = async (boardId: string, body: Task): Promise<Task> => {
  * @returns {Array<Task>} task array board id
  */
 const getAll = async (boardId: string): Promise<Array<Task>> => {
-  let tasks = await tasksRepo.find(t => t.boardId === boardId);
+  let tasks = tasksRepo.find(t => t.boardId === boardId);
   return tasks;
 }
 
@@ -45,7 +47,7 @@ const update = async (tasksId: string, newBody: Task) => {
 
   newBody.id= task.id;
 
-  const updatedtask = await tasksRepo.update(tasksId, newBody);
+  const updatedtask = tasksRepo.update(tasksId, newBody);
   return updatedtask;
 };
 

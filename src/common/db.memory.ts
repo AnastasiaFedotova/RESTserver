@@ -95,9 +95,8 @@ class Context {
           title: 'colum2',
           order: 2
         }]));
-
-        this.usersTable = new Table<User>("users");
         this.tasksTable = new Table<Task>("tasks");
+        this.usersTable = new Table<User>("users");
     }
 
     getBoardsTable() : Table<Board> {
