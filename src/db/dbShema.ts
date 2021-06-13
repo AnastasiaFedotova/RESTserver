@@ -1,8 +1,9 @@
 import * as Sequelize from 'sequelize';
-import config from './../configs/appconfig';
+import config from '../common/config'
 
-const sequelize = new Sequelize.Sequelize(config.db_name, config.user, config.password, {
+const sequelize = new Sequelize.Sequelize(config.POSTGRES.DB, config.POSTGRES.USER, config.POSTGRES.PASSWORD, {
   dialect: 'postgres',
+  host: config.POSTGRES.HOST,
   define: {
     timestamps: false
   }

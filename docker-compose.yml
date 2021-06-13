@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+    postgres:
+      container_name: ${POSTGRES_CONTAINER_NAME}
+      image: fiadotava/postgres
+      restart: always
+      build:
+        context: ./PostgreSQL/
+        dockerfile: Dockerfile
+      ports:
+        - 5430:5432
+      environment:
+        - POSTGRES_DB=${POSTGRES_DB}
+        - POSTGRES_USER=${POSTGRES_USER}
+        - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      volumes:
+        - pgdata:/var/lib/postgresql/data
+      networks:
+        - fiadotava_network
+
+    node:
+      container_name: fiadotava_node
+      image: fiadotava/node
+      build:
+        context: .
+        dockerfile: Dockerfile
+      ports:
+        - ${PORT}:5000
+      environment:
+        - POSTGRES_HOST=${POSTGRES_CONTAINER_NAME}
+        - POSTGRES_DB=${POSTGRES_DB}
+        - POSTGRES_USER=${POSTGRES_USER}
+        - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+        - HOST=${HOST}
+      links:
+        - postgres
+      volumes:
+        - ./:/usr/local/app/
+      depends_on:
+        - postgres
+      networks:
+        - fiadotava_network
+
+volumes:
+  pgdata:
+
+networks:
+  fiadotava_network:
+    driver: bridge
