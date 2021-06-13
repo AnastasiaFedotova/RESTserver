@@ -1,5 +1,7 @@
 import express from 'express';
 import * as boardService from './board.service';
+import tasksRouter from './../../resources/tasks/tasks.router';
+
 const router = express.Router();
 
 router.route('/').get(async (_, res) => {
@@ -43,5 +45,7 @@ router.route('/:id').delete(async (req, res) => {
     res.statusCode = 204;
     res.json('The board has been deleted');
 });
+
+router.use('/', tasksRouter)
 
 export default router;

@@ -34,11 +34,11 @@ class Table<T extends Entity> {
         return this.data;
     }
 
-    async find(predicator: (value: T) => Boolean) {
+    async find(predicator: (value: T) => boolean) {
         return this.data.filter(predicator);
     }
 
-    async removeItems(predicator: (value: T) => Boolean) {
+    async removeItems(predicator: (value: T) => boolean) {
         this.data = this.data.filter(t => !predicator(t));
         return this.data;
     }
@@ -70,7 +70,7 @@ class Table<T extends Entity> {
 
         if (index === -1) throw Error("Item not found");
 
-        var result = items[index];
+        const result = items[index];
         items.splice(index, 1);
 
         return result;
@@ -84,8 +84,19 @@ class Context {
 
     constructor(){
         this.boardsTable = new Table<Board>("boards");
-        this.usersTable = new Table<User>("users");
+        this.boardsTable.addItem(new Board('1', 'board1', [{
+          id: '1',
+          title: 'colum1',
+          order: 1
+        }]));
+
+        this.boardsTable.addItem(new Board('2', 'board2', [{
+          id: '2',
+          title: 'colum2',
+          order: 2
+        }]));
         this.tasksTable = new Table<Task>("tasks");
+        this.usersTable = new Table<User>("users");
     }
 
     getBoardsTable() : Table<Board> {

@@ -1,5 +1,3 @@
-const uuid = require('uuid');
-
 /**
  * A task object with id, title. order, description, userId, boardId, columId.
  * @typedef {Object} Task

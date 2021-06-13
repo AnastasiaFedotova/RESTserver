@@ -1,5 +1,5 @@
 import Board from "./board.model";
-import dbContext from "../../common/db.memory";;
+import dbContext from "../../common/db.memory";
 
 /**
  * A colum with id, title, order.
@@ -59,7 +59,7 @@ const update = (boardsId: string, newBoards: Board) => {
  * @param {string} boardsId a boards id
  * @returns {Board} removed a board
  */
-const remove = (id: string) => {
+const remove = async (id: string) => {
   const board = dbContext.getBoardsTable().removeItem(id);
   const taskTable = dbContext.getTasksTable();
 
