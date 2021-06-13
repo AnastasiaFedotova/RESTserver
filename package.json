@@ -53,6 +53,7 @@
     "dotenv": "9.0.0",
     "express": "4.17.1",
     "jasmine": "^3.7.0",
+    "pg": "^8.6.0",
     "sequelize": "^6.6.2",
     "sequelize-cli": "^6.2.0",
     "sequelize-cli-typescript": "^3.2.0-c",
