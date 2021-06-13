@@ -7,6 +7,10 @@ import boardRouter from './resources/boards/board.router';
 import rrTracer from './middlewares/rrTracer';
 import unhandledExceptions from './middlewares/unhandledExceptions'
 
+import './db/taskShema';
+import './db/userShema';
+import './db/boardShema';
+
 const app = express();
 const swaggerDocument = yaml.load(path.join(__dirname, '../doc/api.yaml'));
 
