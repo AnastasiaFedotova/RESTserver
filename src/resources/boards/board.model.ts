@@ -15,9 +15,9 @@ import { Model } from 'sequelize';
  * @property {Array<Colum>} columns a task's columns.
  */
 class Board extends Model {
-  id = '';
-  title = '';
-  columns: { id: string; title: string; order: number; }[] = [];
+  id!: string;
+  title!: string;
+  columns!: { id: string; title: string; order: number; }[];
 }
 
 export default Board;

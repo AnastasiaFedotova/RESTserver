@@ -21,10 +21,10 @@ import { Model } from 'sequelize';
   userId?: string
 }
  export default class Task extends Model {
-  id = '';
-  title = '';
-  order = 0;
-  description = '';
+  id!: string;
+  title!: string;
+  order!: number;
+  description!: string;
   userId?: string;
   boardId?: string;
   columnId?: string;

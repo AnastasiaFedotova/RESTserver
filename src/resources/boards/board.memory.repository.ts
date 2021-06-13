@@ -1,5 +1,6 @@
-import Board from "./board.model";
-import dbContext from "../../common/db.memory";
+import Board from "./../../db/boardShema";
+import Task from "./../../db/taskShema";
+import BoardModel from "./board.model";
 
 /**
  * A colum with id, title, order.
@@ -21,27 +22,23 @@ import dbContext from "../../common/db.memory";
  * Returns all boards
  * @returns {Array<Board>} all boards
  */
-const getList = () => dbContext.getBoardsTable().getItems();
+const getList = (): Promise<BoardModel[]> => Board.findAll();
 
 /**
  * Returns a board by id
  * @param {string} boardsId boards id
  * @returns {Board} a board by id
  */
-const getById = async (id: string) => {
-  const board = dbContext.getBoardsTable().getItem(id);
-  return board;
-};
+const getById = (id: string): Promise<BoardModel | null> => Board.findOne({ where: {id: id} })
 
 /**
  * Returns added board
  * @param {Board} board object with id, title. colums
  * @returns {Board} added a board
  */
-const add = (board: Board) => {
-  const newboard = dbContext.getBoardsTable().addItem(board);
-  return newboard;
-};
+const add = (board: BoardModel): Promise<BoardModel> => {
+  return Board.create(board);
+}
 
 /**
  * Returns updated board
@@ -49,29 +46,60 @@ const add = (board: Board) => {
  * @param {Board} newBoards a new boards data
  * @returns {Board} updated a board
  */
-const update = (boardsId: string, newBoards: Board) => {
-  const board = dbContext.getBoardsTable().updateItem(boardsId, newBoards);
-  return board;
-};
+const update = (boardsId: string, newBoards: Board) => Board.update({ ...newBoards, id: boardsId }, {
+  where: {
+    id: boardsId
+  }
+});
 
 /**
  * Returns removed a board
  * @param {string} boardsId a boards id
  * @returns {Board} removed a board
  */
-const remove = async (id: string) => {
-  const board = dbContext.getBoardsTable().removeItem(id);
-  const taskTable = dbContext.getTasksTable();
 
-  taskTable.removeItems(t => t.boardId === id);
+const remove = (id: string) => {
+  const board = Board.destroy({
+    where: {
+      id: id
+    }
+  })
+
+  Task.destroy({
+    where: {
+      boardId: id
+    }
+  })
+
   return board;
 };
+
+const fillBordersTable = () => {
+  Board.create({
+    id: '1',
+    title: 'board1',
+    columns: [{
+    id: '1',
+    title: 'colum1',
+    order: 1
+  }]});
+
+  Board.create({
+    id: '2',
+    title: 'board2',
+    columns: [{
+    id: '2',
+    title: 'colum2',
+    order: 2
+  }]});
+}
 
 export {
   getList,
   getById,
   add,
   update,
-  remove
+  remove,
+  fillBordersTable
 };
 

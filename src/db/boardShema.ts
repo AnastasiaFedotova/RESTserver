@@ -6,14 +6,15 @@ Board.init(
   {
     id: {
       type: Sequelize.STRING,
-      primaryKey: true
+      primaryKey: true,
+      allowNull: false
     },
     title: {
       type: Sequelize.STRING,
       allowNull: false
     },
     columns: {
-      type: Sequelize.ARRAY(Sequelize.JSON),
+      type: Sequelize.JSON,
       allowNull: false
     }
   },

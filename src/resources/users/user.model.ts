@@ -11,10 +11,10 @@ import { Model } from 'sequelize';
  * @property {Function} toResponse a user's resonse.
  */
 class User  extends Model{
-  password = '';
-  login = '';
-  id = '';
-  name = '';
+  password!: string;
+  login!: string;
+  id!: string;
+  name!: string;
 }
 
 export default User;

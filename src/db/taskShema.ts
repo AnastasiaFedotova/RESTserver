@@ -13,7 +13,7 @@ Task.init(
       allowNull: false
     },
     order: {
-      type: Sequelize.NUMBER,
+      type: Sequelize.INTEGER,
       allowNull: false
     },
     description: {

@@ -1,34 +1,28 @@
 import * as boardsRepo from './board.memory.repository';
 import * as uuid from "uuid"
 import Board from './board.model';
+
 /**
  * Returns all boards
  * @returns {Array<Board>} all boards
  */
-const getAll = async () => {
-  const boards = boardsRepo.getList();
-  return boards;
-}
+const getAll = () => boardsRepo.getList();
 
 /**
  * Returns a board by id
  * @param {string} id boards id
  * @returns {Board} a board by id
  */
-const getById = async (id: string) => {
-  const board = boardsRepo.getById(id);
-  return board;
-}
+const getById = (id: string) => boardsRepo.getById(id);
 
 /**
  * Returns added board
  * @param {Board} body object with id, title. colums
  * @returns {Board} added a board
  */
-const add = async (body: Board): Promise<Board> => {
+const add = (body: Board): Promise<Board> => {
   body.id = uuid.v4();
-  const addedboard = boardsRepo.add(body);
-  return addedboard;
+  return boardsRepo.add(body);
 };
 
 /**
@@ -37,15 +31,8 @@ const add = async (body: Board): Promise<Board> => {
  * @param {Board} newBody a new boards data
  * @returns {Board} updated a board
  */
-const update = async (id: string, newBody: Board) => {
-  const board = await getById(id);
-
-  if (board == undefined) throw Error()
-
-  newBody.id = board.id;
-
-  const updatedBoard = await boardsRepo.update(id, newBody);
-  return updatedBoard;
+const update = (id: string, newBody: Board) => {
+  return boardsRepo.update(id, newBody);
 };
 
 /**
@@ -53,7 +40,7 @@ const update = async (id: string, newBody: Board) => {
  * @param {string} boardsId a boards id
  * @returns {Board} removed a board
  */
-const remove = async (id: string) => boardsRepo.remove(id);
+const remove = (id: string) => boardsRepo.remove(id);
 
 export {
   getAll,

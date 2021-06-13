@@ -7,10 +7,7 @@ import Task from "./tasks.model";
  * @param {string} id
  * @returns {Task} task by id
  */
-const getById = async (id: string): Promise<Task | null> => {
-  const task = tasksRepo.getById(id);
-  return task;
-}
+const getById = (id: string): Promise<Task | null> => tasksRepo.getById(id);
 
 /**
  * Returns added task
@@ -18,11 +15,10 @@ const getById = async (id: string): Promise<Task | null> => {
  * @param {Task} body object with id, title. order, description, userId, boardId, columId
  * @returns {Task} added a task
  */
-const add = async (boardId: string, body: Task): Promise<Task> => {
+const add = (boardId: string, body: Task): Promise<Task> => {
   body.boardId = boardId;
   body.id = uuid.v4();
-  const addedtask = tasksRepo.add(body);
-  return addedtask;
+  return tasksRepo.add(body);
 };
 
 /**
@@ -30,10 +26,7 @@ const add = async (boardId: string, body: Task): Promise<Task> => {
  * @param {string} boardId board id
  * @returns {Array<Task>} task array board id
  */
-const getAll = async (boardId: string): Promise<Array<Task>> => {
-  const tasks = tasksRepo.find(t => t.boardId === boardId);
-  return tasks;
-}
+const getAll = (boardId: string): Promise<Array<Task>> => tasksRepo.find(boardId);
 
 /**
  * Returns updated task
@@ -47,8 +40,7 @@ const update = async (tasksId: string, newBody: Task) => {
 
   newBody.id= task.id;
 
-  const updatedtask = tasksRepo.update(tasksId, newBody);
-  return updatedtask;
+  return tasksRepo.update(tasksId, newBody);
 };
 
 /**
@@ -56,7 +48,7 @@ const update = async (tasksId: string, newBody: Task) => {
  * @param {string} tasksId tasks id
  * @returns {Task} removed a task
  */
-const remove = async (tasksId: string): Promise<Task | undefined> => tasksRepo.remove(tasksId);
+const remove = (tasksId: string) => tasksRepo.remove(tasksId);
 
 export {
   getById,
