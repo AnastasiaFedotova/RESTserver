@@ -4,7 +4,7 @@ services:
     postgres:
       container_name: ${POSTGRES_CONTAINER_NAME}
       image: fiadotava/postgres
-      restart: always
+      restart: on-failure
       build:
         context: ./PostgreSQL/
         dockerfile: Dockerfile
@@ -22,6 +22,7 @@ services:
     node:
       container_name: fiadotava_node
       image: fiadotava/node
+      restart: on-failure
       build:
         context: .
         dockerfile: Dockerfile
