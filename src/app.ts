@@ -8,6 +8,7 @@ import rrTracer from './middlewares/rrTracer';
 import unhandledExceptions from './middlewares/unhandledExceptions'
 import { fillBordersTable } from './resources/boards/board.memory.repository';
 
+import "reflect-metadata";
 import './db/taskShema';
 import './db/userShema';
 import './db/boardShema';
