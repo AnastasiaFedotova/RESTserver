@@ -1,10 +1,13 @@
 import config from './common/config';
 import { app } from './app';
+import { tryDBconnect } from './db/db';
 import logger from './common/logger'
 
-app.listen(config.PORT, config.HOST, () =>
-  logger.logInfo(`App is running on http://${config.HOST}:${config.PORT}`)
-);
+tryDBconnect(() => {
+  app.listen(config.PORT, config.HOST, () =>
+    logger.logInfo(`App is running on http://${config.HOST}:${config.PORT}`)
+  );
+})
 
 process.on('unhandledRejection', (reason, p) => {
     logger.logWarn('Unhandled Rejection at Promise', reason, p);
