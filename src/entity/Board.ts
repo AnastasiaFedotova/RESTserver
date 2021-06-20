@@ -1,8 +1,8 @@
-import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, BaseEntity} from "typeorm";
 
-@Entity()
-export class Board {
-    @PrimaryGeneratedColumn()
+@Entity({name: 'board'})
+export class Board extends BaseEntity {
+@PrimaryGeneratedColumn()
     id!: string;
 
     @Column()

@@ -1,15 +1,15 @@
-import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, BaseEntity} from "typeorm";
 
 interface task {
   id: string
   title: string
   order: number
   description: string
-  userId?: string
+  userId?: string | null
 }
 
-@Entity()
-export class Task {
+@Entity({name: 'task'})
+export class Task extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: string;
 
@@ -23,7 +23,7 @@ export class Task {
     description!: string;
 
     @Column()
-    userId?: string;
+    userId?: string | null;
 
     @Column()
     boardId?: string;
