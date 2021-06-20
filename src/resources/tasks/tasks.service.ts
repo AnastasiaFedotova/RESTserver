@@ -1,13 +1,12 @@
-import * as uuid from 'uuid';
-import * as tasksRepo from './tasks.memory.repository';
-import Task from "./tasks.model";
+import Task from "./../../entity/Task";
+import * as uuid from "uuid"
 
 /**
  * Returns task by id
  * @param {string} id
  * @returns {Task} task by id
  */
-const getById = (id: string): Promise<Task | null> => tasksRepo.getById(id);
+const getById = (id: string): Promise<Task | undefined> => Task.findOne({id: id});
 
 /**
  * Returns added task
@@ -18,7 +17,8 @@ const getById = (id: string): Promise<Task | null> => tasksRepo.getById(id);
 const add = (boardId: string, body: Task): Promise<Task> => {
   body.boardId = boardId;
   body.id = uuid.v4();
-  return tasksRepo.add(body);
+  const created = Task.create(body);
+  return Task.save(created);
 };
 
 /**
@@ -26,7 +26,7 @@ const add = (boardId: string, body: Task): Promise<Task> => {
  * @param {string} boardId board id
  * @returns {Array<Task>} task array board id
  */
-const getAll = (boardId: string): Promise<Array<Task>> => tasksRepo.find(boardId);
+const getAll = (boardId: string): Promise<Array<Task>> => Task.createQueryBuilder("task").where("task.boardId = :id", { id: boardId }).getMany();
 
 /**
  * Returns updated task
@@ -38,9 +38,9 @@ const update = async (tasksId: string, newBody: Task) => {
   const task = await getById(tasksId);
   if (task == null) throw new Error("Task not found");
 
-  newBody.id= task.id;
+  newBody.id = task.id;
 
-  return tasksRepo.update(tasksId, newBody);
+  return Task.save(newBody);
 };
 
 /**
@@ -48,7 +48,9 @@ const update = async (tasksId: string, newBody: Task) => {
  * @param {string} tasksId tasks id
  * @returns {Task} removed a task
  */
-const remove = (tasksId: string) => tasksRepo.remove(tasksId);
+const remove = (tasksId: string) => {
+  Task.delete(tasksId);
+}
 
 export {
   getById,

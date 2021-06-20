@@ -1,19 +1,22 @@
 import { ConnectionOptions } from "typeorm";
+import config from "./config"
 
 export default {
   "type": "postgres",
-  "host": "localhost",
-  "port": 5430,
-  "username": process.env['POSTGRES_USER'],
-  "password": process.env['POSTGRES_PASSWORD'],
-  "database": process.env['POSTGRES_DB'],
-  "synchronize": true,
+  "host": config.POSTGRES.HOST,
+  "port": 5432,
+  "username": config.POSTGRES.USER,
+  "password": config.POSTGRES.PASSWORD,
+  "database": config.POSTGRES.DB,
+  //"synchronize": true,
+  migrationsRun: true,
+  "bigNumberStrings": false,
   "logging": false,
   "entities": [
-     "src/entity/**/*.ts"
+     "src/entity/*.ts"
   ],
   "migrations": [
-     "src/migration/**/*.ts"
+     "src/migration/*.ts"
   ],
   "subscribers": [
      "src/subscriber/**/*.ts"

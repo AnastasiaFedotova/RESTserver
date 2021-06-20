@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity} from "typeorm";
+import {Entity, Column, BaseEntity, PrimaryColumn} from "typeorm";
 
 interface task {
   id: string
@@ -8,9 +8,9 @@ interface task {
   userId?: string | null
 }
 
-@Entity({name: 'task'})
-export class Task extends BaseEntity {
-    @PrimaryGeneratedColumn()
+@Entity({name: 'tasks'})
+export default class Task extends BaseEntity {
+    @PrimaryColumn()
     id!: string;
 
     @Column()
@@ -22,7 +22,7 @@ export class Task extends BaseEntity {
     @Column()
     description!: string;
 
-    @Column()
+    @Column({type: "varchar"})
     userId?: string | null;
 
     @Column()

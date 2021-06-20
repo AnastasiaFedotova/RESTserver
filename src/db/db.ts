@@ -1,33 +1,17 @@
-import { getConnection, createConnection } from 'typeorm';
+import { createConnection } from 'typeorm';
 import config from '../common/ormconfig';
+import logger from '../common/logger'
+import config2 from "../common/config"
+//import { fillBordersTable } from '../resources/boards/board.service'
+import { types } from "pg"
 
-const connectToDB = async () => {
-  let connection;
-
-  try {
-    connection = getConnection();
-  } catch(err) {
-    console.log(err)
-  }
-
-  try {
-    if (connection) {
-      if (!connection.isConnected) await connection.connect();
-    } else {
-      createConnection(config)
-    }
-
-    console.log('Typeorm: connected');
-  } catch(err) {
-    console.log('TypeormError', err);
-  }
-}
-
-export const tryDBconnect = async (cb: () => void) => {
-  try {
-    await connectToDB();
-    cb()
-  } catch(err) {
-    console.log(err)
-  }
-}
+types.setTypeParser(types.builtins.NUMERIC, (value: string): number => parseFloat(value))
+export default createConnection(config)
+  .then(_ => {
+    //fillBordersTable();
+    logger.logInfo("Connection with db has been created1")
+  })
+  .catch(err => {
+    logger.logInfo("", config2.POSTGRES)
+    logger.logError("Error appered when try to connect to db", err)
+  });

@@ -1,6 +1,6 @@
 import express from 'express';
 import * as usersService from './user.service';
-import User from './user.model'
+import User from '../../entity/User'
 const router = express.Router();
 
 router.route('/').get(async (_, res) => {
@@ -19,10 +19,15 @@ router.route('/:id').get(async (req, res) => {
 });
 
 router.route('/').post(async (req, res) => {
-    const newUser = req.body;
-    const user = await usersService.add(newUser);
-    res.contentType('application/json');
-    res.status(201).json(toResponse(user));
+    try {
+      const newUser = req.body;
+      const user = await usersService.add(newUser);
+      res.contentType('application/json');
+      res.status(201).json(toResponse(user));
+    }
+    catch (error) {
+      console.log(error)
+    }
 });
 
 router.route('/:id').put(async (req, res) => {

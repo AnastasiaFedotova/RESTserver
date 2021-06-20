@@ -44,11 +44,16 @@ router.route('/:id').put(async (req, res) => {
 });
 
 router.route('/:id').delete(async (req, res) => {
-    const boardId = req.params.id;
-    await boardService.remove(boardId);
-    res.contentType('application/json');
-    res.statusCode = 204;
-    res.json('The board has been deleted');
+    try {
+      const boardId = req.params.id;
+      await boardService.remove(boardId);
+      res.contentType('application/json');
+      res.statusCode = 204;
+      res.json('The board has been deleted');
+    }
+    catch(error) {
+      console.log(error)
+    }
 });
 
 router.use('/', tasksRouter)
