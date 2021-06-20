@@ -1,3 +1,4 @@
+import { Model } from 'sequelize';
 /**
  * A colum with id, title, order.
  * @typedef {Object} Colum
@@ -13,22 +14,10 @@
  * @property {string} title a task's title.
  * @property {Array<Colum>} columns a task's columns.
  */
-class Board {
-  id: string;
-  title: string;
-  columns: { id: string; title: string; order: number; }[];
-  constructor(
-    id: string,
-    title: string,
-    columns : {
-      id: string
-      title: string,
-      order: number
-    }[]) {
-    this.id = id;
-    this.title = title;
-    this.columns = columns;
-  }
+class Board extends Model {
+  id!: string;
+  title!: string;
+  columns!: { id: string; title: string; order: number; }[];
 }
 
 export default Board;

@@ -1,9 +1,9 @@
-const { PORT } = require('./common/config');
+import config from './common/config';
 import { app } from './app';
 import logger from './common/logger'
 
-app.listen(PORT, () =>
-  logger.logInfo(`App is running on http://localhost:${PORT}`)
+app.listen(config.PORT, config.HOST, () =>
+  logger.logInfo(`App is running on http://${config.HOST}:${config.PORT}`)
 );
 
 process.on('unhandledRejection', (reason, p) => {

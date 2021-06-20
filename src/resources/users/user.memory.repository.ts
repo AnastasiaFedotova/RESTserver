@@ -1,5 +1,6 @@
-import dbContext from "../../common/db.memory";
-import User from "./user.model";
+import UserModel from "./user.model";
+import User from "./../../db/userShema";
+import Task from "./../../db/taskShema";
 
 /**
  * A user object with id, name, login, password.
@@ -14,27 +15,27 @@ import User from "./user.model";
  * Returns all users
  * @returns {Array<User>} users array
  */
-const getList = async (): Promise<Array<User>> => dbContext.getUsersTable().getItems();
+const getList = (): Promise<Array<UserModel>> => User.findAll();
 
 /**
  * Returns a user by ID
  * @param {string} usersId users ID
  * @returns {User} user
  */
-const getById = (id: string): Promise<User | undefined> => {
-  const user = dbContext.getUsersTable().getItem(id);
-  return user;
-};
+const getById = (id: string) => User.findOne(
+  {
+    where: {
+      id: id
+    }
+  }
+)
 
 /**
  * Returns added a new user
  * @param {User} user object to be added
  * @returns {User} a new user
  */
-const add = (user: User): Promise<User> => {
-  const newUser = dbContext.getUsersTable().addItem(user);
-  return newUser;
-};
+const add = (user: User): Promise<UserModel> => User.create(user);
 
 /**
  * Returns updated a user
@@ -42,26 +43,31 @@ const add = (user: User): Promise<User> => {
  * @param {User} newUsers a new users data
  * @returns {User} updated a user
  */
-const update = (id: string, newUser: User): Promise<User> => {
-  const user = dbContext.getUsersTable().updateItem(id, newUser);
-  return user;
-};
+const update = async (userId: string, newUser: UserModel) => {
+  return User.update({ ...newUser, id: userId }, {
+    where: {
+      id: userId
+    }
+  });
+}
 
 /**
  * Returns deleted a user
  * @param {string} usersId a users id
  * @returns {User} deleted a user
  */
-const remove = async (id: string): Promise<User | undefined> => {
-  const user = await dbContext.getUsersTable().removeItem(id);
-  const usersTasks = await dbContext.getTasksTable().getItems();
-
-  usersTasks.forEach((item: { userId: string | null }) => {
-    if (item.userId === id) {
-      const task = item;
-      task.userId = null;
+const remove = async (userId: string): Promise<number> => {
+  const user = await User.destroy({
+    where: {
+      id: userId
     }
   });
+
+  await Task.update({ userId: null }, {
+    where: {
+      userId: userId
+    }
+  })
 
   return user;
 };

@@ -24,10 +24,15 @@ router.route('/:id').get(async (req, res) => {
 });
 
 router.route('/').post(async (req, res) => {
+  try {
     const newBoard = req.body;
     const board = await boardService.add(newBoard);
     res.contentType('application/json');
     res.status(201).json(board);
+  }
+  catch(err) {
+    console.log(err);
+  }
 });
 
 router.route('/:id').put(async (req, res) => {
