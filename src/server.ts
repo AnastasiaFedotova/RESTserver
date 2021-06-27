@@ -1,5 +1,7 @@
+require('dotenv').config()
 import config from './common/config';
 import { app } from './app';
+import './db/db';
 import logger from './common/logger'
 
 app.listen(config.PORT, config.HOST, () =>

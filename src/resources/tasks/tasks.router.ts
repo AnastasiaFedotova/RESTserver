@@ -3,20 +3,30 @@ import * as tasksService from './tasks.service';
 const router = express.Router();
 
 router.route('/:boardId/tasks').post(async (req, res) => {
-    const {boardId} = req.params;
-    const newtask = req.body;
-    const task = await tasksService.add(boardId, newtask);
-    res.contentType('application/json');
-    res.status(201).json(task);
+    try {
+      const {boardId} = req.params;
+      const newtask = req.body;
+      const task = await tasksService.add(boardId, newtask);
+      res.contentType('application/json');
+      res.status(201).json(task);
+    }
+    catch(error) {
+      console.log(error)
+    }
 });
 
 
 router.route('/:boardId/tasks').get(async (req, res) => {
+  try {
     const {boardId} = req.params;
     const tasks = await tasksService.getAll(boardId);
     res.contentType('application/json');
     res.statusCode = 200;
     res.json(tasks);
+  }
+  catch(error) {
+    console.log(error)
+  }
 });
 
 router.route('/:boardId/tasks/:idTasks').get(async (req, res) => {
@@ -40,11 +50,16 @@ router.route('/:boardId/tasks/:taskId').put(async (req, res) => {
 });
 
 router.route('/:boardId/tasks/:taskId').delete(async (req, res) => {
-      const {taskId} = req.params;
-      await tasksService.remove(taskId);
-      res.contentType('application/json');
-      res.statusCode = 204;
-      res.json('The task has been deleted');
+  try {
+    const {taskId} = req.params;
+    await tasksService.remove(taskId);
+    res.contentType('application/json');
+    res.statusCode = 204;
+    res.json('The task has been deleted');
+  }
+  catch(error) {
+    console.log(error);
+  }
 });
 
 export default router;
