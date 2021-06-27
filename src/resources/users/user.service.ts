@@ -1,6 +1,9 @@
+import bcrypt from 'bcrypt';
 import  User from "./../../entity/User";
 import  Task  from "./../../entity/Task";
 import * as uuid from "uuid"
+
+const saltRounds = 10;
 
 const getList = () => {
   return User.find();
@@ -10,8 +13,16 @@ const getById = (id: string): Promise<User | undefined> => {
   return User.findOne(id)
 }
 
-const add = (user: User): Promise<User> => {
+const getByLogin = (login: string) => {
+  return User.findOne({login: login})
+}
+
+
+const add = async (user: User): Promise<User> => {
   user.id = uuid.v4();
+  const salt = await bcrypt.genSalt(saltRounds);
+  const hash = await bcrypt.hash(user.password, salt);
+  user.password = hash
   const newUser = User.create(user);
   const saveUser = User.save(newUser);
   return saveUser;
@@ -39,5 +50,6 @@ export {
   getById,
   add,
   update,
-  remove
+  remove,
+  getByLogin
 };

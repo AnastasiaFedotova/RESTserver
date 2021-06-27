@@ -4,6 +4,7 @@ import path from 'path';
 import yaml from 'yamljs';
 import userRouter from './resources/users/user.router';
 import boardRouter from './resources/boards/board.router';
+import loginRouter from './resources/auth/login.router';
 import rrTracer from './middlewares/rrTracer';
 import unhandledExceptions from './middlewares/unhandledExceptions'
 import "reflect-metadata";
@@ -26,6 +27,7 @@ app.use('/', (req, res, next) => {
 
 app.use('/users', userRouter);
 app.use('/boards', boardRouter);
+app.use('/login', loginRouter);
 app.use(unhandledExceptions);
 
 export { app }
