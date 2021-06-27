@@ -1,8 +1,11 @@
 import express from 'express';
 import * as boardService from './board.service';
 import tasksRouter from './../../resources/tasks/tasks.router';
+import auth from '../../middlewares/auth';
 
 const router = express.Router();
+
+router.use(auth);
 
 router.route('/').get(async (_, res) => {
     const boards = await boardService.getAll();

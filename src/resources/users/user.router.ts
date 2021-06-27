@@ -1,7 +1,10 @@
 import express from 'express';
 import * as usersService from './user.service';
-import User from '../../entity/User'
+import User from '../../entity/User';
+import auth from '../../middlewares/auth';
 const router = express.Router();
+
+router.use(auth);
 
 router.route('/').get(async (_, res) => {
     const users = await usersService.getList();

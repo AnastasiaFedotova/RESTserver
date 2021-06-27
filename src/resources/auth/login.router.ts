@@ -19,10 +19,12 @@ router.route('/').post(async (req, res) => {
     if (dbuser) isUser = await bcrypt.compare(user.password, dbuser.password);
 
     if (isUser) {
-      const token = authService.generateAccessToken(user);
+      const token = authService.generateAccessToken({
+        userId: dbuser?.id,
+        login: dbuser?.login
+      });
       res.status(201).json({ token: token });
-    }
-    else res.status(403)
+    } else res.status(403)
   }
   catch (error) {
     console.log(error)

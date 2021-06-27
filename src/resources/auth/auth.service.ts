@@ -1,9 +1,8 @@
 import jwt from 'jsonwebtoken';
 import config from '../../common/config';
-import AuthUser from '../../models/authUser';
 
-const generateAccessToken = (user: AuthUser) => {
-  return jwt.sign(user, config.TOKEN_SECRET, { expiresIn: '1800s' });
+const generateAccessToken = (userData: {login: string | undefined, userId: string | undefined}) => {
+  return jwt.sign(userData, config.TOKEN_SECRET, { expiresIn: '1800s' });
 }
 
 export {
