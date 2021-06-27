@@ -38,6 +38,7 @@ services:
         - postgres
       volumes:
         - ./:/usr/local/app/
+        - /usr/src/app/node_modules
       depends_on:
         - postgres
       networks:
