@@ -24,7 +24,10 @@ router.route('/').post(async (req, res) => {
         login: dbuser?.login
       });
       res.status(201).json({ token: token });
-    } else res.status(403)
+    } else {
+      console.log('not found');
+      res.status(403).json('not found');
+    }
   }
   catch (error) {
     console.log(error)
