@@ -17,12 +17,11 @@ const getByLogin = (login: string) => {
   return User.findOne({login: login})
 }
 
-
 const add = async (user: User): Promise<User> => {
+  const hashpassword = await bcrypt.hash(user.password, saltRounds);
+  user.password = hashpassword;
   user.id = uuid.v4();
-  const salt = await bcrypt.genSalt(saltRounds);
-  const hash = await bcrypt.hash(user.password, salt);
-  user.password = hash
+
   const newUser = User.create(user);
   const saveUser = User.save(newUser);
   return saveUser;

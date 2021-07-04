@@ -1,6 +1,9 @@
 import express from 'express';
 import * as tasksService from './tasks.service';
+import auth from '../../middlewares/auth';
 const router = express.Router();
+
+router.use(auth);
 
 router.route('/:boardId/tasks').post(async (req, res) => {
     try {
