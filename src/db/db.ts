@@ -1,27 +1,34 @@
-import { createConnection } from 'typeorm';
-import config from '../common/ormconfig';
-import logger from '../common/logger'
-import config2 from "../common/config"
-//import { fillBordersTable } from '../resources/boards/board.service'
-import * as userService from '../resources/users/user.service'
-import { types } from "pg"
-import User from '../entity/User';
+import { Injectable } from "@nestjs/common";
+import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from "@nestjs/typeorm";
+import config from "../common/config";
 
-types.setTypeParser(types.builtins.NUMERIC, (value: string): number => parseFloat(value))
-export default createConnection(config)
-  .then(_ => {
-    //fillBordersTable();
-    return userService.getByLogin("admin");
-  })
-  .then(res => {
-    const newUser = new User();
-      newUser.login = 'admin';
-      newUser.password = 'admin';
-      newUser.name = 'admin';
-    if (!res) userService.add(newUser)
-    logger.logInfo("Connection with db has been created1")
-  })
-  .catch(err => {
-    logger.logInfo("", config2.POSTGRES)
-    logger.logError("Error appered when try to connect to db", err)
-  });
+@Injectable()
+export class TypeOrmConfigService implements TypeOrmOptionsFactory {
+  createTypeOrmOptions(): TypeOrmModuleOptions {
+    return {
+      "type": "postgres",
+      "host": config.POSTGRES.HOST,
+      "port": 5432,
+      "username": config.POSTGRES.USER,
+      "password": config.POSTGRES.PASSWORD,
+      "database": config.POSTGRES.DB,
+      //"synchronize": true,
+      migrationsRun: true,
+      "logging": false,
+      "entities": [
+         "src/entity/*.ts"
+      ],
+      "migrations": [
+         "src/migration/*.ts"
+      ],
+      "subscribers": [
+         "src/subscriber/**/*.ts"
+      ],
+      "cli": {
+         "entitiesDir": "src/entity",
+         "migrationsDir": "src/migration",
+         "subscribersDir": "src/subscriber"
+      }
+    };
+  }
+}
