@@ -5,7 +5,6 @@ import ormconfig from "../common/ormconfig";
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   createTypeOrmOptions(): TypeOrmModuleOptions {
-    console.log(ormconfig);
     return ormconfig;
   }
 }
