@@ -1,10 +1,27 @@
-import * as express from 'express';
-import logger from '../common/logger'
+import { ExceptionFilter, Catch, ArgumentsHost, HttpException } from '@nestjs/common';
+import { Request, Response } from 'express';
+import Logger from '../common/logger'
 
-export default (err: express.Errback, _: express.Request, response: express.Response, next: express.NextFunction) => {
-  if (err) {
-    logger.logError("Something happend in service", err);
-    response.statusCode = 500;
+@Catch(HttpException)
+export class HttpExceptionFilter implements ExceptionFilter {
+
+  constructor(private logger: Logger) {
   }
-  next(err);
+
+  catch(exception: HttpException, host: ArgumentsHost) {
+    const ctx = host.switchToHttp();
+    const response = ctx.getResponse<Response>();
+    const request = ctx.getRequest<Request>();
+    const status = exception.getStatus();
+
+    this.logger.logError("Something happend in service", exception);
+
+    response
+      .status(status)
+      .json({
+        statusCode: status,
+        timestamp: new Date().toISOString(),
+        path: request.url,
+      });
+  }
 }
