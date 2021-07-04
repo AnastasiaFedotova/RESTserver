@@ -99,5 +99,4 @@ export class CreateMainTables1624212633662 implements MigrationInterface {
     public async down(_: QueryRunner): Promise<void> {
         _;
     }
-
 }

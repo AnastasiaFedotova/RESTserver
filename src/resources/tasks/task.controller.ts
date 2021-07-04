@@ -1,12 +1,14 @@
-import { Controller, Get, Put, Delete, Res, Req, Param } from '@nestjs/common';
+import { Controller, Get, Put, Delete, Res, Req, Param, Post, HttpCode, BadRequestException, UseGuards} from '@nestjs/common';
 import { Response, Request } from 'express';
+import { AuthGuard } from '../../guards/auth.guard';
 import { TaskService } from './task.service';
 
-@Controller('tasks')
+@Controller()
+@UseGuards(AuthGuard)
 export class TaskController {
   constructor(private taskService: TaskService) {}
 
-  @Get('/:boardId/tasks')
+  @Get('boards/:boardId/tasks')
   async findByBorderId(@Res() res: Response, @Param() params: {boardId: string}): Promise<void> {
     try {
       const { boardId } = params;
@@ -20,7 +22,7 @@ export class TaskController {
     }
   }
 
-  @Get('/:boardId/tasks/:idTasks')
+  @Get('boards/:boardId/tasks/:idTasks')
   async findById(@Res() res: Response, @Param() params: {idTasks: string}): Promise<void> {
     const taskId = params.idTasks;
     const task = await this.taskService.getById(taskId);
@@ -33,8 +35,23 @@ export class TaskController {
     }
   }
 
+  @Post('boards/:boardId/tasks')
+  @HttpCode(201)
+  async add(@Req() req: Request, @Res() res: Response): Promise<void> {
+    try {
+      const {boardId} = req.params;
+      if (!boardId) throw new BadRequestException();
+      const newtask = req.body;
+      const task = await this.taskService.add(boardId, newtask);
+      res.contentType('application/json');
+      res.status(201).json(task);
+    }
+    catch(error) {
+      console.log(error)
+    }
+  }
 
-  @Put('/:boardId/tasks/:taskId')
+  @Put('boards/:boardId/tasks/:taskId')
   async updateById(@Req() req: Request, @Res() res: Response, @Param() params: {taskId: string}): Promise<void> {
     const newData = req.body;
     const {taskId} = params;
@@ -43,7 +60,7 @@ export class TaskController {
     res.status(200).json(task);
   }
 
-  @Delete('/:boardId/tasks/:taskId')
+  @Delete('boards/:boardId/tasks/:taskId')
   async removeById(@Res() res: Response, @Param() params: {taskId: string}): Promise<void> {
     try {
       const {taskId} = params;

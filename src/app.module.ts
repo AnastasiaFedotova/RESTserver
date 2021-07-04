@@ -1,29 +1,29 @@
-import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer, Global } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RouterModule } from 'nest-router';
+//import { RouterModule } from 'nest-router';
 //import { getConnectionOptions } from 'typeorm';
 import { RrTracerMiddleware } from './middlewares/rrTracer';
 import { BoardModule } from './resources/boards/board.module';
 import { TaskModule } from './resources/tasks/task.module';
 import { UserModule } from './resources/users/user.module';
 import { AuthModule } from './resources/auth/auth.module';
-import { routes } from './routes';
-import User from './entity/User';
-import Board from './entity/Board';
-import Task from './entity/Task';
+//import { routes } from './routes';
+// import User from './entity/User';
+// import Board from './entity/Board';
+// import Task from './entity/Task';
 import { TypeOrmConfigService } from './db/db';
+import Logger from './common/logger';
 
+@Global()
 @Module({
   imports: [
-    RouterModule.forRoutes(routes),
     UserModule, TaskModule, BoardModule, AuthModule,
-    TypeOrmModule.forFeature([
-      User, Board, Task
-    ]),
     TypeOrmModule.forRootAsync({
-      useClass: TypeOrmConfigService
+      useClass: TypeOrmConfigService,
     })
-  ]
+  ],
+  providers: [Logger],
+  exports: [Logger]
 })
 
 export class AppModule implements NestModule {

@@ -12,8 +12,8 @@ const saltRounds = 10;
 export class UserService {
   constructor(
     @InjectRepository(User)
-    @InjectRepository(Task)
     private usersRepository: Repository<User>,
+    @InjectRepository(Task)
     private taskRepository: Repository<Task>,
   ) {}
 

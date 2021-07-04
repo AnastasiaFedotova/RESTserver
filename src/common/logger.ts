@@ -1,5 +1,7 @@
+import { Injectable } from '@nestjs/common';
 import winston from 'winston'
 
+@Injectable()
 class Logger {
     winstonLogger: winston.Logger;
 
@@ -33,6 +35,4 @@ class Logger {
     }
 }
 
-const logger = new Logger();
-
-export default logger;
+export default Logger;

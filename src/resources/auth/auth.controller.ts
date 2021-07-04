@@ -9,7 +9,7 @@ import AuthUser from "../../models/authUser";
 export class AuthController {
   constructor(private authService: AuthService, private userService: UserService) {}
 
-  @Post()
+  @Post("login")
   async add(@Req() req: Request, @Res() res: Response): Promise<void> {
     let isUser = false;
     try {

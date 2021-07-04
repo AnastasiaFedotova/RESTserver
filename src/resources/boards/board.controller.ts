@@ -3,7 +3,7 @@ import { Response, Request } from 'express';
 import { AuthGuard } from '../../guards/auth.guard';
 import { BoardService } from './board.service';
 
-@Controller('users')
+@Controller('boards')
 @UseGuards(AuthGuard)
 export class BoardController {
   constructor(private boardService: BoardService) {}
